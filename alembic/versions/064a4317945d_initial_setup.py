@@ -1,8 +1,8 @@
-"""initial model schema setup
+"""initial setup
 
-Revision ID: d9717054d8c2
+Revision ID: 064a4317945d
 Revises: 
-Create Date: 2025-11-23 14:14:57.768744
+Create Date: 2025-11-23 17:54:44.902885
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = 'd9717054d8c2'
+revision: str = '064a4317945d'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -108,7 +108,6 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_bookmark_id'), 'bookmark', ['id'], unique=False)
     op.create_table('ebooktag',
-    sa.Column('id', sa.Uuid(), nullable=False),
     sa.Column('ebook_id', sa.Uuid(), nullable=False),
     sa.Column('tag_id', sa.Uuid(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
@@ -118,9 +117,8 @@ def upgrade() -> None:
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['ebook_id'], ['ebook.id'], ),
     sa.ForeignKeyConstraint(['tag_id'], ['tag.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('ebook_id', 'tag_id')
     )
-    op.create_index(op.f('ix_ebooktag_id'), 'ebooktag', ['id'], unique=False)
     op.create_table('note',
     sa.Column('id', sa.Uuid(), nullable=False),
     sa.Column('user_id', sa.Uuid(), nullable=False),
@@ -162,7 +160,6 @@ def downgrade() -> None:
     op.drop_table('userreadingsession')
     op.drop_index(op.f('ix_note_id'), table_name='note')
     op.drop_table('note')
-    op.drop_index(op.f('ix_ebooktag_id'), table_name='ebooktag')
     op.drop_table('ebooktag')
     op.drop_index(op.f('ix_bookmark_id'), table_name='bookmark')
     op.drop_table('bookmark')

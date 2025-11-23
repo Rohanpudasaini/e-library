@@ -43,9 +43,8 @@ class Tag(Base):
 
 
 class EBookTag(Base):
-    id: Mapped[UUID] = mapped_column(default=uuid7, primary_key=True, index=True)
-    ebook_id: Mapped[UUID] = mapped_column(ForeignKey("ebook.id"))
-    tag_id: Mapped[UUID] = mapped_column(ForeignKey("tag.id"))
+    ebook_id: Mapped[UUID] = mapped_column(ForeignKey("ebook.id"), primary_key=True)
+    tag_id: Mapped[UUID] = mapped_column(ForeignKey("tag.id"), primary_key=True)
 
     ebook: Mapped["EBook"] = relationship(back_populates="tags")
     tag: Mapped["Tag"] = relationship(back_populates="ebook_tags")

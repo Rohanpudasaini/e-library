@@ -76,7 +76,7 @@ class AuthenticationError(BaseException):
 class AuthorizationError(BaseException):
     def __init__(
         self,
-        exception_type: str,
+        exception_type: str = "Not Authorized",
         msg: str | None = None,
         loc: list[str] | None = None,
         detail: Any | None = None,
@@ -95,7 +95,7 @@ class AuthorizationError(BaseException):
 class BadRequest(BaseException):
     def __init__(
         self,
-        exception_type: str,
+        exception_type: str = "Bad Request",
         msg: str | None = None,
         loc: list[str] | None = None,
         detail: Any | None = None,
@@ -114,7 +114,7 @@ class BadRequest(BaseException):
 class NotFound(BaseException):
     def __init__(
         self,
-        exception_type: str,
+        exception_type: str = "Not Found",
         msg: str | None = None,
         loc: list[str] | None = None,
         detail: Any | None = None,

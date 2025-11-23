@@ -29,3 +29,9 @@ class UserCreate(SchemaBase):
 class PasswordUpdate(SchemaBase):
     old_password: str
     new_password: str
+
+
+class UserReadingSessionSchema(SchemaBase):
+    id: UUID
+    ebook_id: UUID
+    last_page: int
