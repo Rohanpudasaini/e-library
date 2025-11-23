@@ -105,7 +105,7 @@ class Base(initial_base):
         return (
             db.query(cls)
             .filter(and_(cls.id == id, cls.is_deleted.is_(False), cls.is_active))
-            .one()
+            .first()
         )
 
 
