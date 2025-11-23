@@ -90,8 +90,8 @@ def add_bookmark(
     if not ebook:
         raise NotFound(msg=f"EBook with id {ebook_id} not found")
     bookmark = (
-        db.query(ebook.bookmarks)
-        .filter_by(user_id=user_id, page_number=page_number)
+        db.query(Bookmark)
+        .filter_by(user_id=user_id, ebook_id=ebook_id, page_number=page_number)
         .first()
     )
     if bookmark:
