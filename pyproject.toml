@@ -16,5 +16,6 @@ dependencies = [
     "python-multipart>=0.0.20",
     "ruff>=0.14.6",
     "sqlalchemy>=2.0.44",
+    "uuid7>=0.1.0",
     "uvicorn>=0.38.0",
 ]
