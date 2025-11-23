@@ -11,13 +11,14 @@ from core.auth.security import (
     ALGORITHM,
     SECRET_KEY,
     create_refresh_token,
-    pwd_context,
+    verify_password,
 )
 from core.exception import (
     AUTHENTICATION_EXCEPTION,
     AuthenticationError,
 )
 from models.user import User
+from schema.user import Token
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
@@ -35,17 +36,23 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 def authenticate_user(username: str, password: str, db: Session):
     user = db.query(User).filter(User.email == username, User.is_active)
     user = user.first()
-    if not user or not pwd_context.verify(password, user.password):
+    if not user or not verify_password(password, user.password):
         raise AUTHENTICATION_EXCEPTION
     return user
 
 
 def login_for_access_token(username: str, password: str, db: Session):
     user = authenticate_user(username, password, db)
-    access_token = create_access_token(data={"sub": str(user.id)})
+    access_token = create_access_token(
+        data={
+            "sub": str(user.id),
+            "preferences": user.profile.preferences if user.profile else {},
+            "dark_mode": user.profile.dark_mode if user.profile else False,
+        }
+    )
     # Create refresh token
     refresh_token = create_refresh_token(data={"sub": str(user.id)})
-    return access_token, refresh_token
+    return Token(access_token=access_token, refresh_token=refresh_token)
 
 
 #
