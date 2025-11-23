@@ -82,9 +82,9 @@ def get_reading_sessions(
         return user.reading_sessions
     if id:
         session = UserReadingSession.get(db=db, id=id)
-        if session:
-            return session
-    raise NotFound(msg="Reading session not found")
+        if not session or session.user_id != user.id:
+            raise NotFound(msg="Reading session not found")
+        return session
 
 
 @app.post("/user/reading-sessions/{ebook_id}", response_model=UserReadingSessionSchema)
