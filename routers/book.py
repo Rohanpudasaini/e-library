@@ -58,11 +58,12 @@ def add_tags_to_ebook(
     book = EBook.get(db=db, id=ebook_id)
     if not book:
         raise NotFound(msg=f"EBook with id {ebook_id} not found")
-    for tag_id in tag_ids:
-        tag = Tag.get(db=db, id=tag_id)
-        if not tag:
-            raise NotFound(msg=f"Tag with id {tag_id} not found")
-        _ = EBookTag(ebook_id=ebook_id, tag_id=tag_id).create(db=db)
+    tags = db.query(Tag).filter(Tag.id.in_(tag_ids)).all()
+    if len(tags) != len(tag_ids):
+        missing_ids = set(tag_ids) - {tag.id for tag in tags}
+        raise NotFound(msg=f"Tags not found: {missing_ids}")
+    for tag in tags:
+        _ = EBookTag(ebook_id=ebook_id, tag_id=tag.id).create(db=db)
     print(book.tags[0].tag.name)
     return book
 
