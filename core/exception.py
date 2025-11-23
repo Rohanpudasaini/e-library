@@ -46,7 +46,7 @@ class BaseException(HTTPException):
     ):
         logging_data = [
             str(status_code),
-            getattr(config, "environment", "unknown"),  # Avoid missing attribute error
+            getattr(config, "env", "unknown"),  # Avoid missing attribute error
             exception_type,
             msg,
             json.dumps(detail),

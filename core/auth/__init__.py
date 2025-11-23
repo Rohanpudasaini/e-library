@@ -32,7 +32,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-def authenticate_user(username: str, password: str, db: Session, is_admin: bool):
+def authenticate_user(username: str, password: str, db: Session):
     user = db.query(User).filter(User.email == username, User.is_active)
     user = user.first()
     if not user or not pwd_context.verify(password, user.password):
@@ -40,14 +40,8 @@ def authenticate_user(username: str, password: str, db: Session, is_admin: bool)
     return user
 
 
-def login_for_access_token(
-    username: str, password: str, db: Session, is_admin: bool = False
-):
-    user = authenticate_user(username, password, db, is_admin)
-    if not user:
-        raise AuthenticationError(
-            "AuthenticationError", msg="Incorrect username or password"
-        )
+def login_for_access_token(username: str, password: str, db: Session):
+    user = authenticate_user(username, password, db)
     access_token = create_access_token(data={"sub": str(user.id)})
     # Create refresh token
     refresh_token = create_refresh_token(data={"sub": str(user.id)})
