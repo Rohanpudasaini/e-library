@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from config import authconfig, db_config
+from config import auth_config, db_config
 
 app = FastAPI()
 
