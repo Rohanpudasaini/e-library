@@ -41,8 +41,14 @@ class BaseSettings(PydanticBaseSettings):
     )
 
 
+class BaseConfig(BaseSettings):
+    env: str = "dev"
+    debug: bool = True
+    log_exceptions: bool = True
+    log_exclude_exception_codes: list[str] = []
+
+
 class AuthTokenConfig(BaseSettings):
-    user_access_token_expiry_minutes: int = 1440  # 24 hours
     secret_key: str
     refresh_secret_key: str
     access_token_expire_minutes: int
@@ -59,5 +65,6 @@ class DBConfig(BaseSettings):
     pool_pre_ping: bool = True
 
 
-authconfig = AuthTokenConfig()  # type: ignore
+auth_config = AuthTokenConfig()  # type: ignore
 db_config = DBConfig()  # type: ignore
+base_config = BaseConfig()

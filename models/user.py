@@ -15,8 +15,6 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     password: Mapped[str] = mapped_column(String(255))
     full_name: Mapped[str | None] = mapped_column(String(255))
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-
     profile: Mapped["UserProfile"] = relationship(back_populates="user", uselist=False)
     bookmarks: Mapped[list["Bookmark"]] = relationship(back_populates="user")
     notes: Mapped[list["Note"]] = relationship(back_populates="user")
