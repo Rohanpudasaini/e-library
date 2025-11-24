@@ -32,6 +32,10 @@ Using **uv** for package management:
 uv venv && uv sync
 ```
 
+```bash
+uv run alembic upgrade heads
+```
+
 ### 4. Run the app
 
 ```bash
